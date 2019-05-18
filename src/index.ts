@@ -21,6 +21,11 @@ const apiController = new ApiController(new ApiServiceImpl());
 // Insert your routes here
 app.post("/apis", apiController.createNewApi);
 app.get("/apis", apiController.listAllApis);
+app.get("/apis/:name", apiController.getOneApiByName);
+app.delete("/apis/:name", apiController.removeoneApiByName);
+app.get("/apis/:name/endpoints", apiController.getOneApiEndpointsByName);
+app.post("/apis/:name/endpoints", apiController.addOneEndpointToApiByName);
+app.delete("/apis/:name/endpoints/:endpoint", apiController.removeOneEndpointFromApiByName);
 
 // Configure error handler, do not add more config below
 app.use(customErrorHandler);

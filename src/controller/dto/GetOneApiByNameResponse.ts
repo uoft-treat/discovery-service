@@ -1,16 +1,16 @@
 import {IApi} from "../../model/Api";
 
-export class ListAllApisResponse {
+export class GetOneApiByNameResponse {
 
     name: string;
     endpoints: string[];
 
     /**
      * Construct this DTO from models.
-     * @param model Message model.
+     * @param model
      */
     static constructFromModel(model: IApi) {
-        let dto = new ListAllApisResponse();
+        let dto = new GetOneApiByNameResponse();
         dto.name = model.name;
         dto.endpoints = model.endpoints;
         return dto;

@@ -1,6 +1,10 @@
-import {ApiService}           from "../service/ApiService";
-import {CreateNewApiResponse} from "./dto/CreateNewApiResponse";
-import {ListAllApisResponse}  from "./dto/ListAllApisResponse";
+import {ApiService}                        from "../service/ApiService";
+import {CreateNewApiResponse}              from "./dto/CreateNewApiResponse";
+import {ListAllApisResponse}               from "./dto/ListAllApisResponse";
+import {GetOneApiByNameResponse}           from "./dto/GetOneApiByNameResponse";
+import {AddOneEndpointToApiByNameResponse} from "./dto/AddOneEndpointToApiByNameResponse";
+import {RemoveOneEndpointFromApiByName}    from "./dto/RemoveOneEndpointFromApiByName";
+import {RemoveOneApiByName}                from "./dto/RemoveOneApiByName";
 
 export class ApiController {
 
@@ -25,7 +29,7 @@ export class ApiController {
                 )
             );
         } catch (e) {
-            next(e);
+            return next(e);
         }
     };
 
@@ -38,40 +42,92 @@ export class ApiController {
     listAllApis = async (req, res, next) => {
         let apis = await this.apiService.listAllApis();
         let result = [];
-        for(let api of apis) {
+        for (let api of apis) {
             result.push(ListAllApisResponse.constructFromModel(api));
         }
         res.send(result);
+    };
+
+    /**
+     * Handle GET /apis/:name
+     * @param req
+     * @param res
+     * @param next
+     */
+    getOneApiByName = async (req, res, next) => {
+        try {
+            res.send(
+                GetOneApiByNameResponse.constructFromModel(
+                    await this.apiService.getOneApiByName(req.params.name)
+                )
+            );
+        } catch (e) {
+            return next(e);
+        }
+    };
+
+    /**
+     * Handle GET /apis/:name/endpoints
+     * @param req
+     * @param res
+     * @param next
+     */
+    getOneApiEndpointsByName = async (req, res, next) => {
+        try {
+            res.send(
+                GetOneApiByNameResponse.constructFromModel(
+                    await this.apiService.getOneApiByName(req.params.name)
+                ).endpoints
+            );
+        } catch (e) {
+            return next(e);
+        }
+    };
+
+    /**
+     * Handle POST /apis/:name/endpoints
+     * @param req
+     * @param res
+     * @param next
+     */
+    addOneEndpointToApiByName = async (req, res, next) => {
+        try {
+            await this.apiService.addEndpointToApiByName(req.params.name, req.body.endpoint);
+        } catch (e) {
+            return next(e);
+        }
+        res.status(201);
+        res.send(AddOneEndpointToApiByNameResponse.constructFromMessage("ok"));
+    };
+
+    /**
+     * Handle DELETE /apis/:name/endpoints/:endpoint
+     * @param req
+     * @param res
+     * @param next
+     */
+    removeOneEndpointFromApiByName = async (req, res, next) => {
+        try {
+            await this.apiService.deleteEndpointFromApiByName(req.params.name, req.params.endpoint);
+        } catch (e) {
+            return next(e);
+        }
+        res.send(RemoveOneEndpointFromApiByName.constructFromMessage("ok"));
+    };
+
+    /**
+     * Handle DELETE /apis/:name
+     * @param req
+     * @param res
+     * @param next
+     */
+    removeoneApiByName = async (req, res, next) => {
+        try {
+            await this.apiService.deleteOneApiByName(req.params.name);
+        } catch (e) {
+            return next(e);
+        }
+        res.send(RemoveOneApiByName.constructFromMessage("ok"));
     }
-
-    //
-    // /**
-    //  * Handle POST /messages request
-    //  * @param req
-    //  * @param res
-    //  * @param next
-    //  */
-    // createNewMessage = async (req, res, next) => {
-    //     if(!req.body.message) {
-    //         return next(Boom.badRequest("You must provide a message"));
-    //     }
-    //     let message = await this.messageService.createNewMessage(req.body.message);
-    //     res.send(CreateNewMessageResponse.constructFromModel(message));
-    // };
-    //
-    // /**
-    //  * Handle GET /messages request
-    //  * @param req
-    //  * @param res
-    //  * @param next
-    //  */
-    // listAllMessages = async (req, res, next) => {
-    //     let messages = await this.messageService.getAll();
-    //     let response: GetOneMessageResponse[] = [];
-    //     for(let msg of messages) {
-    //         response.push(GetOneMessageResponse.constructFromModel(msg));
-    //     }
-    //     res.send(response);
-    // };
-
+    
 }

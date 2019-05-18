@@ -1,7 +1,7 @@
 import {IApi} from "../../model/Api";
 
 export class CreateNewApiResponse {
-    _id: string;
+    name: string;
 
     /**
      * Construct this DTO from a model.
@@ -9,7 +9,7 @@ export class CreateNewApiResponse {
      */
     static constructFromModel(model: IApi) {
         let dto = new CreateNewApiResponse();
-        dto._id = model._id.toString();
+        dto.name = model.name.toString();
         return dto;
     }
 }
