@@ -1,15 +1,8 @@
-# common-service-template
+# Discovery Service
 
-Template for common micro-services.
+A common service used to find other service endpoints. Kind of like Netflix Eureka, but way less powerful.
 
-This package contains many useful dependencies that you might want to use:
-
-* Babel with TypeScript
-* Boom
-* Express.js
-* Mongoose
-* Dotenv
-* Mocha
+By default this service runs on port `3030`, it is recommended that you don't change this setting if possible.
 
 ## Quick Start
 
@@ -22,3 +15,4 @@ $ cp .env.example .env
 Then edit `.env` file to match your local setup.
 
 Finally, run `npm install && npm start` to run the development environment.
+
