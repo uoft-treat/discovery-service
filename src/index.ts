@@ -25,6 +25,7 @@ const apiController = new ApiController(new ApiServiceImpl());
 const dashboardController = new DashboardController(new ApiServiceImpl());
 
 // API routes
+app.get("/ping", (req, res) => res.send("pong"));
 app.post("/apis", apiController.createNewApi);
 app.get("/apis", apiController.listAllApis);
 app.get("/apis/:name", apiController.getOneApiByName);
